@@ -1,0 +1,403 @@
+---
+title: "ANLY601 Assignment1"
+author: "Xiner Ning"
+date: "1/20/2020"
+output: html_document
+
+header-includes: 
+  - \usepackage{tikz}
+---
+
+# Problem {.tabset .tabset-dropdown}
+
+## Exercise 1 (Likelihood Estimation)
+
+1. What is the maximum likelihood estimate for $\theta$ when $X_i$ ~ Geometric($\theta$)? 
+
+PMF for Geometric Distribution is $f(x) = \theta(1-\theta)^{x-1}$  
+ 
+Log Likelihood function for $\theta$ is:  
+  
+$l(\theta) = \Pi_{i=1}^{n}ln[(1-\theta)^{x_i-1}\theta]$ 
+  
+=$\Sigma_{i=1}^{n}ln[(1-\theta)^{x_i-1}\theta]$ = $\Sigma_{i=1}^{n}[ln(1-\theta)^{x_i-1}+ln\theta]$  
+  
+= $\Sigma_{i=1}^{n}ln\theta + \Sigma_{i=1}^{n}(x_1-1)ln(1-\theta)$  
+  
+MLE for $\theta$ is the $\theta$ such that $\frac{\partial}{\partial\theta}{\{\Sigma_{i=1}^{n}ln\theta + \Sigma_{i=1}^{n}(x_1-1)ln(1-\theta)}\} = 0$,  
+  
+so $\frac{n}{\theta} + \Sigma_{i=1}^{n}(x_1-1)\frac{-1}{1-\theta}$,  
+  
+so $\frac{n}{\theta} - \frac{1}{1-\theta}\Sigma_{i=1}^{n}x_i + \frac{n}{1-\theta} = 0$,  
+  
+so $\frac{n}{\theta(1-\theta)} = \frac{1}{1-\theta}\Sigma_{i=1}^{n}x_i$,  
+  
+  
+so $\hat{\theta} = \frac{n}{\Sigma_{i=1}^{n}x_i}$  
+  
+  
+ 
+
+
+2. What is the maximum likelohood estimate for a and b when $X_i$ ~ $Unif(a,b)$?  
+  
+PDF for Uniform Distribution is $f(x;a,b) = \frac{1}{b-a}$  
+  
+So the Likelihood function is $\Pi_{i=1}^{n}f(x_i;a,b) = \frac{1}{(b-a)^n}$  
+  
+Take log on both sides of the function  
+  
+$log\Pi_{i=1}^{n}f(x_i;a,b) = -nlog(b-a)$  
+  
+Take derivative of the function on a, we get  
+  
+$\frac{\partial}{\partial a} = \frac{n}{b-a}$, which is monotonically increasing. Thus, the MLE for a would be the largest a possible, which would simply be:  
+  
+$\hat{a} = \min{x_1,x_2,...x_n}$  
+  
+  
+Take derivative of the function on b, we get  
+  
+$\frac{\partial}{\partial b} = \frac{-n}{b-a}$, which is monotonically decreasing. Thus, the MLE for b would be the smallest b possible, which would simply be:  
+  
+$\hat{b} = \max{x_1,x_2,...x_n}$      
+
+  
+  
+
+
+
+## Exercise 2 (Loss Function)  
+  
+1. Show that squarred error loss (L2 loss) is equivalent to the negative log likelihood of a $Y$ ~ $N(\mu,\sigma^2)$ where $\sigma$ is known.   
+  
+$P(y|\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}e^\frac{-(y-\mu)^2}{2\sigma^2}$  
+  
+Likelihood Function $L(\mu,\sigma^2 | y_1,y_2,...y_n) = (2\pi\sigma^2)^\frac{-n}{2}exp(\frac{-1}{2\sigma^2}\Sigma_{i=1}^{n}(y_i-\mu)^2)$  
+  
+So Log Likelihood Function $l = \frac{-n}{2}ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}\Sigma_{i=1}^{n}(y_i-\mu)^2)$  
+  
+So Negative Log Likelihood Function is $-l = \frac{n}{2}ln(2\pi\sigma^2) + \frac{1}{2\sigma^2}\Sigma_{i=1}^{n}(y_i-\mu)^2)$, where n and $\sigma$ are constant.    
+    
+Since L2 Loss Function is $\Sigma_{i=1}^{n}(y_y-y_{predicted})^2$, the two functions are equivalent.  
+  
+  
+2. Show that the mean absolute error (L1 loss) is equivalent to the nagative log likelihood of a $Y$ ~ $LaPlace(\theta)$.  
+  
+$f_y(y)=\frac{1}{2}e^{|y-\theta|}$  
+  
+Likelihood Function $L(\theta | y_1,y_2,...y_n) = 2^{-n}exp(\Sigma_{i=1}^{n}-|y_i-\theta|)$  
+  
+So Log Likelihood Function $l=-nln2 - \Sigma_{i=1}^{n}|y_i-\theta|$  
+  
+So Negative Log Likelihood Function $-l=nln2 + \Sigma_{i=1}^{n}|y_i-\theta|$, where n is constant.  
+  
+Since L1 Loss Function is $\Sigma_{i=1}^{n}|y_y-y_{predicted}|$ , the two functions are equivalent.  
+  
+## Exercise 3 (Decision Rules)  
+1.  
+Risk function $R = E_\mu[\space L(\mu,\delta(x))\space] = E_\mu[\space (\delta(x)-\mu\space)^2]$  
+  
+$= E[\delta^2(x)]-2\mu E[\delta(x)] + \mu^2 =  E[\delta^2(x)]-2\mu^2 + \mu^2$, since $\delta(x)$ is unbaised so $E[\delta(x)]=\mu$ 
+  
+When $\delta(x) = \bar{x}$, $E[\delta^2(x)]-2\mu^2 + \mu^2$ is minimized since $E[\delta^2(x)]-2\mu^2 + \mu^2 = E[\mu^2]-\mu^2 = 0$  
+  
+So $\bar{x}$ is the optimal decision rule for the mean squarred error.  
+  
+2.  
+Risk function $R = E_\mu[\space L(\mu,\delta(x))\space] = E_\mu[\space |\delta(x)-\mu\space|]$
+  
+So R is nothing but mean deviation about $\mu$. Since mean deviation is minimized when the estimator is median, median is the optimal decision rule for the absolite loss error.  
+  
+  
+
+
+## Exercise 4 (Convexity)  
+1.  
+$L(y,p) = -(ylog(\frac{1}{1+e^{-\beta x}})+(1-y) log(1-\frac{1}{1+e^{-\theta x]}}))$  
+  
+$=-(ylog(e^{\beta x}) -y log(1+e^{\beta x}) + log(\frac{1}{1+e^{\beta x} })+ ylog(1+e^{\beta x}))$  
+  
+$= -(ylog(e^{\beta x})- log(1+e^{\beta x}))$  
+  
+$= -xy\beta + log(1+e^{\beta x})$  
+  
+Here we use the second derivative rule to prove convexity.  
+
+$\frac{\partial L}{\partial \beta} = -xy+\frac{e^{\beta x}x}{1+e^{\beta x}} = -xy + \frac{x}{1+e^{-\beta x}}$  
+  
+$\frac{\partial L}{\partial \beta^2} = \frac{x^2e^{-\beta x}}{(1+e^{-\beta x})^2}$, which is $\geq 0$  
+
+Thus, the function L is convex. 
+  
+  
+  
+2.  
+Same as above, we use the second derivative rule to prove convexity.  
+  
+$\frac{\partial L}{\partial \beta} = (2xy+2xye^{-\beta x}-2x)(1+e^{-\beta x})^{-3}$  
+  
+$\frac{\partial L}{\partial \beta^2} = \frac{(e^{-\beta x})(-2x^2y-2x^2ye^{\beta x} -6xy)-6xy}{(1+e^{-\beta x})^4}$  
+  
+Since there is no sign showing that the second derivative is $\geq0$, the function is not convex in $\beta$.  
+  
+## Exercise 5(Decision Boundaries)  
+  
+Plot 3 different $f_\beta(x)$ with 3 sets of $\beta$ values:  
+  
+  $\beta_0=0,\beta_1=1$  
+  $\beta_0=0,\beta_1=-2$  
+  $\beta_0=0.5,\beta_1=1$  
+  
+```{r}
+eq1 = function(x){1/(1+exp(-x))}
+eq2 = function(x){1/(1+exp(-2*x))}
+eq3 = function(x){1/(1+exp(-0.5-x))}
+
+plot(eq1, from=-10, to=10, xlab="x", ylab="y",col='blue',lwd=3)
+par(new=TRUE)
+plot(eq2, from=-10, to=10, xlab="x", ylab="y",col='red',lwd=3)
+par(new=TRUE)
+plot(eq3, from=-10, to=10, xlab="x", ylab="y",col='green',lwd=3)
+
+
+legend(-8, 0.9, legend=c("f1 (0,1)", "f2 (0,-2)",'f3 (0.5,1)'),
+       col=c("blue", "red",'green'), lty=1, cex=0.8)
+
+abline(v=0, col="black")
+```
+  
+logit$f_\beta(x) = $ logit($\frac{1}{1+e^{-\beta x}}$) = $ln( \frac{\frac{1}{1+e^{-\beta x}}}{1-\frac{1}{1+e^{-\beta x}}} ) = \beta_0 + \beta_1x$  
+  
+Since the decision threshold is about $f_\beta(0)$, based on the graph above:  
+  
+  when the dataset is balanced -> f1 and f2 are better models than f3  
+    
+  when the dataset is skewed towards to Class A -> f1 and f2 are better models than f3  
+    
+  when the data is skewed towards to Class B -> f3 is better model than f1 and f2    
+  
+So $\beta_0 + \beta_1x$ is a linear separating hyperplane.     
+     
+     
+  
+
+
+
+
+## Exercise 6 (Sufficient Statistics)
+
+$f_n(x|\mu) =\Pi_{i=1}^{n}(\frac{1}{\sigma \sqrt{2\pi}})^nexp(\frac{-(x_i-\mu)^2}{2\sigma^2})$  
+  
+$= (\frac{1}{\sigma \sqrt{2\pi}})^n exp(\frac{-\Sigma(x_i^2-2x_i\mu+\mu^2)}{2\sigma^2})$  
+  
+$= (\frac{1}{\sigma \sqrt{2\pi}})^n exp(-\Sigma x_i^2)exp(2n\mu \bar{x}-n\mu^2)$  
+  
+Since the first two terms do not depend on $\mu$, and the last term depend on $\mu$ only through $\bar{x}$. By factorization theorem, $T=\bar{x}$ is a sufficient statistics for $\mu$.  
+
+## Exercise 7 (Ancilliarity) Q1  
+$F_R(r|\theta) = P_\theta(R\leq r)$ 
+$=P_\theta(max_i(x_i) - min_i(x_i) \leq r)$  
+$= P_\theta(max_i(z_i+\theta) - min_i(z_i-\theta))$  
+$= P_\theta(max_iz_i-min_iz_i) \leq r$, which is not depend on $\theta$ because the distribution of $z_1,z_2,...,z_n$ does not depende on $\theta$. 
+  
+## Exercise 8 (Completeness)  
+Suppose X follows distribution $N ~ (\mu,\mu^2)$ 
+  
+$f(x|\mu) = (\frac{1}{\mu \sqrt{2\pi}})^n e^{\frac{-\Sigma(x_i-\mu)^2}{2\mu^2}}$  
+  
+$= (\frac{1}{ \sqrt{2\pi}})^n e^{\frac{-n}{2}} (\frac{1}{\mu})^n e^{\frac{-\Sigma x_i^2}{2\mu^2}} e^{\frac{n\Sigma x_i}{\mu}}$  
+  
+By Factorization Theorem, the sufficient statistics for $\mu$ is $T(x) = (\Sigma x_i^2,\Sigma x_i)$  
+  
+  
+Let $g(T) = n \Sigma x_i^2 - 2(\Sigma x_i)^2$,  
+  
+so $E_\mu(g(T)) = nE(x_i^2 + ... + x_n^2) - 2E(\Sigma x_i)E(\Sigma x_i)$  
+  
+Since $E(\Sigma x_i) = E(n\bar{x}) = n\mu$  
+  
+$E_\mu(g(T)) = nE(x_i^2)+...+nE(x_n^2)-2(n\mu)^2$  
+  
+Since $E(x_i^2) = \sigma^2 + \mu^2 = 2\mu^2$  
+  
+$E_\mu(g(T)) = 2n^2\mu^2-2n^2\mu^2 =0$  
+  
+Since $P_\mu (n \Sigma x_i^2 - 2(\Sigma x_i)^2=0) = P_\mu(n \Sigma x_i^2 = 2(\Sigma x_i)^2) \neq  1$ for all $\mu$, by the definition of Complete Statistics, $T(x) = (\Sigma x_i^2,\Sigma x_i)$ is not complete.  
+  
+
+
+
+  
+  
+
+
+
+
+## Exercise 9 (Regular exponential family)  
+1.  
+$P(x|\theta) = \frac{\theta^x e^{-\theta}}{x!} = \frac{1}{x!}exp(log_{\theta}{x}-\theta)$  
+  
+So Poission Distribution is part of the regular exponential family with   
+  
+$h(x) = \frac{1}{x!}$, $\eta(\theta) = log(\theta)$, $T(x) = x$, $B(\theta) = \theta$  
+  
+## Exercise 10 (Regular Exponential Family)  
+The regular exponential family has form:  
+  
+  $f(X=x | \eta) = h(x)exp(\space \eta T(x)-B(\eta)\space ), h(x)>0$  
+  
+Then  
+  $E_\eta[\space T(x) \space] = B'(\eta)$  
+  $Var[\space T(x) \space] = B''(\eta)$  
+  
+So  
+  $Cov(T_i(x),T_j(x)) = E[\space T_i(x)T_j(x) \space] - E[T_i(x)]E[T_j(x)]$  
+  
+  $= E[T^{2}(x)] - E^2[T(x)]$  
+    
+  $= Var[T(x)] + E^2[T(x)] - E^2[T(x)] = Var[T(x)] = B''(\eta) = \frac{\partial B(\eta)}{\partial\eta_i \partial\eta_j}$  
+    
+So the equation is proved.      
+  
+## Exercise 11 (Delta Method)  
+Suppose X follows Bernoulli Distribution with $\mu$ and $\sigma^2$.  
+  
+By Central Limit Theorem, $\bar{X}$ ~ N($\mu$,$(\frac{\sigma}{\sqrt{n}})^2$)  
+  
+So for random variable $\sqrt{n}(\bar{x}-\mu)$, $E[\sqrt{n}(\bar{x}-\mu)]= 0$, $Var[\sqrt{n}(\bar{x}-\mu)]= Var[\sqrt{n}\bar{x}]=nVar[\bar{x}]=\sigma ^2$  
+  
+So we have $\sqrt{n}(\bar{x}-\mu)$ ~ N(0,$\sigma^2$)  
+  
+Let function $g(x)=x(1-x)$, so $g(\bar{x}) = \bar{x}(1-\bar{x})$, $g(\mu) = \mu(1-\mu)$, so $g'(\mu) = 1-2\mu$
+  
+Based on Delta Method, $\sqrt{n}[\bar{x}(1-\bar{x})-\mu(1-\mu)]$ ~ $N(0,\sigma^2(1-2\mu)^2)$  
+  
+Adding constant $\sqrt{n}\mu(1-\mu)$ to the random variable will not change the variance and will increase the mean by $\sqrt{n}\mu(1-\mu)$.  
+  
+So $\sqrt{n}\bar{x}(1-\bar{x})$  ~ $N(\sqrt{n}\mu(1-\mu),\sigma^2(1-2\mu)^2)$  
+  
+Multiply the random variable by $\frac{1}{\sqrt{n}}$, now we have  
+  
+$\bar{x}({1-\bar{x}})$ ~ $N(\mu(1-\mu),\frac{\sigma^2(1-2\mu)^2}{n})$  
+  
+Since X ~ Bernoulli ($\mu$,$\sigma^2$) with probability p, we know $\mu$ = p and $\sigma^2$=p(1-p)  
+  
+Replace $\mu$ and $\sigma$, we get:  
+  
+$\hat{\tau}= \hat{p}(1-\hat{p})= \bar{x}(1-\bar{x})$ ~ $N(p(1-p),\frac{p(1-p)(1-2p)^2}n)$  
+
+
+  
+  
+## Exercise 12 (Differential Entropy)  
+  
+Differential Entropy of a continuous random variable X is $h(X) = -\int_{-\infty}^{\infty}f(x)logf(x) dx$  
+  
+Here $f(x) = N(x; \mu,\Sigma) = \frac{1}{(2\pi)^{\frac{d}{2}}\sqrt{|\Sigma|}} exp(-\frac{1}{2}(x-\mu)\Sigma^{-1}(x-\mu)^T)$, where $x$,$\mu$ are d-dimension vectors. $|\Sigma|$ is the determinant of covariance matrix.  
+  
+Thus, $h(x) = -\int_{-\infty}^{\infty} N(x;\mu,\Sigma)ln(N(x;\mu,\Sigma)) dx$  
+  
+$= E[ln(N(x;\mu,\Sigma))]$  
+  
+$=-E[ln([(2\pi)^d|\Sigma|]^{-\frac{1}{2}})+ln e^{-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu)}$  
+  
+$= -E[ln([(2\pi)^{d}|\Sigma|]^{\frac{1}{2}})] - E[lnexp(-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu))]$  
+  
+$= -E[-\frac{1}{2}ln((2\pi)^d|\Sigma|))] + \frac{1}{2}E[(x-\mu)^{T}\Sigma^{-1}(x-\mu)]$  
+  
+$= \frac{d}{2}ln(2\pi)+\frac{1}{2}ln(|\Sigma|) + \frac{1}{2}E[(x-\mu)^{T}\Sigma^{-1}(x-\mu)]$   
+  
+By the property of trace, $\frac{1}{2}E[(x-\mu)^{T}\Sigma^{-1}(x-\mu)] = \frac{1}{2}E[trace((x-\mu)^{T}\Sigma^{-1}(x-\mu))]$  
+  
+$=\frac{1}{2}trace(\Sigma^{-1}E[(x-\mu)(x-\mu)^T])$  
+  
+$=\frac{1}{2}trace(\Sigma^{-1} \Sigma) $  
+  
+$= \frac{1}{2}trace(I) = \frac{d}{2}$  
+  
+So $h(x) = \frac{d}{2}ln(2\pi)+\frac{1}{2}ln(|\Sigma|) + \frac{d}{2}$  
+
+  
+## Exercise 13 (Joint Entropy)  
+
+1.  
+Joint entropy \begin{align*}
+            H(x,y) &= -\sum_{X,Y} p(X,Y) \log p(X,Y)\\
+            &= -\frac{1}{4}\log \frac{1}{4} - \frac{1}{12} \log \frac{1}{12} - \frac{1}{6} \log \frac{1}{6} - \frac{1}{12} \log \frac{1}{12} - \frac{1}{4}\log \frac{1}{4} - \frac{1}{6} \log \frac{1}{6}\\
+            &= \frac{5}{3} + \frac{1}{2}\log 3
+        \end{align*}
+  
+2.  
+The marginal of x:
+           $p(x=0)=\frac{1}{3}$, $p(x=1)=\frac{1}{3}$, $p(x=2)=\frac{1}{3}$  
+  
+p(Y|X):  
+          $p(y=0|x=0)=\frac{3}{4}$, $p(y=0|x=1)=\frac{1}{4}$,  
+          $p(y=0|x=2)=\frac{1}{2}$, $p(y=1|x=0)=\frac{1}{4}$,  
+          $p(y=1|x=1)=\frac{3}{4}$, $p(y=1|x=2)=\frac{1}{2}$  
+  
+So $H(Y|X) = -\Sigma_{x} p(x) \Sigma_{y}p(y|x)\space log\space p(y|x)  = \frac{5}{3}-\frac{1}{2}log3$  
+  
+3.  
+$H(X) = -\Sigma p(x)log \space p(x) = -\frac{1}{3}log(\frac{1}{3})*3 = log3$  
+  
+So $H(X) + H(Y|X) = \frac{5}{3} + \frac{1}{2}\log 3 = H(X,Y)$, the entropy results are consistent with the chain rule $H(X,Y) = H(X) + H(Y|X)$  
+  
+  
+## Huffman coding and probability trees
+    
+Step 1: sort words in the ascending order of their frequency/probability 
+  
+  dog 1  
+  paper 1  
+  cat 2  
+  shelf 3  
+  geometric 3  
+  vase 4  
+  runner 6  
+  
+Step 2: start creating the code tree by combining the two words with the least frequency into a single node  
+  
+![](1.png)
+  
+Step 3: keep adding the word with the next largest probability to the tree until there is no word with probability larger than the sum.  
+  
+![](2.png)  
+  
+Step 4: now we start a new tree with the same process  
+  
+![](3.png)
+  
+Step 5: now we combine the two trees together  
+  
+![](4.png)  
+  
+Step 6: assign path on the left to 0 and right to 1    
+  
+![](5.png)  
+  
+So the encoding for each words are:  
+  
+  dog 0110  
+  paper 0111  
+  cat 010  
+  shelf 110  
+  geometric 111  
+  vase 00  
+  runner 10  
+  
+The total bits is $\Sigma$(length of encoding)(frenquency) = 52  
+  
+The average bit is $\frac{52}{20}=2.6$  
+  
+
+
+
+
+
+
+
+
+
+
